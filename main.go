@@ -15,6 +15,8 @@ func main() {
 		panic(err)
 	}
 
+	
+
 	queue := list.New()
 
 	// Simulate the queue of borrowers to be processed
@@ -23,11 +25,12 @@ func main() {
 	}
 
 	mutex := &sync.Mutex{}
-
 	for queue.Len() > 0 {
 		go func() {
-			borrower := queue.Front().Value.(models.Borrower)
+			element := queue.Front()
+			borrower := element.Value.(models.Borrower)
 			utils.WriteToJSONFile("./test_data/resuts.json", &borrower, mutex)
+			queue.Remove(element)
 		} ()
 	}
 }

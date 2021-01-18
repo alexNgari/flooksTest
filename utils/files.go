@@ -23,7 +23,11 @@ func ReadJSONFile(path string) (data *models.JSONData, err error) {
 		return nil, fmt.Errorf("Error reading file: %v", err)
 	}
 
-	json.Unmarshal(jsonObject, data)
+	data = &models.JSONData{}
+	err = json.Unmarshal(jsonObject, data)
+	if err != nil {
+		return nil, fmt.Errorf("Error unmarshalling json: %v", err)
+	} 
 
 	return data, nil
 }
@@ -43,6 +47,8 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 		return fmt.Errorf("Error reading file: %v", err)
 	}
 
+	scoresFile.Close()
+
 	var scores models.CreditScores
 
 	json.Unmarshal(scoresJSON, &scores)
@@ -61,8 +67,6 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 	if !found {
 		scores.CreditScores = append(scores.CreditScores, *creditScore)
 	}
-
-	scoresFile.Close()
 
 	newScoresJSON, _ := json.Marshal(scores)
 
