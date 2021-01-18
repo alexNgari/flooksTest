@@ -86,6 +86,9 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 		return
 	}
 
-	ioutil.WriteFile(path, newScoresJSON, 0644)
+	err = ioutil.WriteFile(path, newScoresJSON, 0666)
+	if err != nil {
+		return fmt.Errorf("Error writing file: %v", err)
+	}
 	return nil
 }
