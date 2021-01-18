@@ -51,8 +51,11 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 
 	var scores models.CreditScores
 
-	json.Unmarshal(scoresJSON, &scores)
-	
+	err = json.Unmarshal(scoresJSON, &scores)
+	if err != nil {
+		return fmt.Errorf("Results file contains invalid JSON: %v", err)
+	}
+
 	creditScore := CalculateScore(borrower)
 	
 	found := false
