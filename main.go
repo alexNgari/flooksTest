@@ -28,9 +28,15 @@ func main() {
 	for queue.Len() > 0 {
 		go func() {
 			element := queue.Front()
+			if element == nil {
+				return
+			}
 			borrower := element.Value.(models.Borrower)
-			utils.WriteToJSONFile("./test_data/resuts.json", &borrower, mutex)
+			err := utils.WriteToJSONFile("./test_data/resuts.json", &borrower, mutex)
 			queue.Remove(element)
+			if err != nil {
+				panic(err)
+			}
 		} ()
 	}
 }
