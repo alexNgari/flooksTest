@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/alexNgari/flooksTest/models"
 	"sync"
+	"container/list"
 
 	"github.com/alexNgari/flooksTest/utils"
 )
@@ -13,11 +15,19 @@ func main() {
 		panic(err)
 	}
 
+	queue := list.New()
+
+	// Simulate the queue of borrowers to be processed
+	for _, person := range dataObject.Borrowers {
+		queue.PushBack(person)
+	}
+
 	mutex := &sync.Mutex{}
 
-	for _, person := range dataObject.Borrowers {
+	for queue.Len() > 0 {
 		go func() {
-			utils.WriteToJSONFile("./test_data/resuts.json", &person, mutex)
+			borrower := queue.Front().Value.(models.Borrower)
+			utils.WriteToJSONFile("./test_data/resuts.json", &borrower, mutex)
 		} ()
 	}
 }
