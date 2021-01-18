@@ -1,1 +1,12 @@
-{}
+{
+	"creditScores": [
+		{
+			"borrowerId": 1,
+			"creditScore": 5
+		},
+		{
+			"borrowerId": 2,
+			"creditScore": 5
+		}
+	]
+}
