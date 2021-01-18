@@ -37,7 +37,6 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 	if err != nil {
 		return fmt.Errorf("Error opening file: %v", err)
 	}
-	defer scoresFile.Close()
 
 	scoresJSON, err := ioutil.ReadAll(scoresFile)
 	if err != nil {
@@ -63,5 +62,10 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 		scores.CreditScores = append(scores.CreditScores, *creditScore)
 	}
 
+	scoresFile.Close()
+
+	newScoresJSON, _ := json.Marshal(scores)
+
+	ioutil.WriteFile(path, newScoresJSON, 0644)
 	return nil
 }
