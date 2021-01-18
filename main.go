@@ -31,8 +31,8 @@ func main() {
 			if element == nil {
 				return
 			}
-			defer queue.Remove(element)
 			borrower := element.Value.(models.Borrower)
+			queue.Remove(element)
 			err := utils.WriteToJSONFile("./test_data/resuts.json", &borrower, mutex)
 			if err != nil {
 				panic(err)
