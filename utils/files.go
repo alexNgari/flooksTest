@@ -71,7 +71,10 @@ func WriteToJSONFile(path string, borrower *models.Borrower, mutex *sync.Mutex) 
 		scores.CreditScores = append(scores.CreditScores, *creditScore)
 	}
 
-	newScoresJSON, _ := json.Marshal(scores)
+	newScoresJSON, err := json.Marshal(scores)
+	if err != nil {
+		return fmt.Errorf("Error converting results to JSON: %v", err)
+	}
 
 	ioutil.WriteFile(path, newScoresJSON, 0644)
 	return nil
